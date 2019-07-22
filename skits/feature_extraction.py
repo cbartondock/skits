@@ -69,17 +69,30 @@ class IntegratedTransformer(BaseEstimator, TransformerMixin):
         Xt2 = self.ar2.transform(X)
         return Xt1 - Xt2
 
-
-class TrendTransformer(BaseEstimator, TransformerMixin):
-
-    def __init__(self):
+class MovingAverageTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self, window=5):
         super().__init__()
+        self.window = window
 
     def fit(self, X, y=None):
         return self
 
     def transform(self, X, y=None):
-        return np.expand_dims(np.arange(X.shape[0]), axis=1)
+        z2 = np.cumsum(np.pad(X, ((self.window,0),(0,0)), 'constant', constant_values=0), axis=0)
+        z1 = np.cumsum(np.pad(X, ((0,self.window),(0,0)), 'constant', constant_values=X[-1]), axis=0)
+        return (z1 - z2)[(n-1):-1]/n
+
+class TrendTransformer(BaseEstimator, TransformerMixin):
+
+    def __init__(self, shift=0):
+        super().__init__()
+        self.shift=shift
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X, y=None):
+        return np.expand_dims(np.arange(self.shift,self.shift+X.shape[0]), axis=1)
 
 
 class FourierTransformer(BaseEstimator, TransformerMixin):

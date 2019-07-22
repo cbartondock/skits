@@ -278,7 +278,7 @@ class ForecasterPipeline(_BasePipeline):
         for idx in range(start_idx, end_idx):
 
             # Predict the next point
-            offset = trans_window or len(X)
+            offset = trans_window or np.inf
             next_point = expand_dim_if_needed(
                 self.predict(X_total[max(0,idx - offset):idx], to_scale=True,
                              refit=False)
