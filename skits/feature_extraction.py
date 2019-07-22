@@ -80,7 +80,7 @@ class MovingAverageTransformer(BaseEstimator, TransformerMixin):
     def transform(self, X, y=None):
         z2 = np.cumsum(np.pad(X, ((self.window,0),(0,0)), 'constant', constant_values=0), axis=0)
         z1 = np.cumsum(np.pad(X, ((0,self.window),(0,0)), 'constant', constant_values=X[-1]), axis=0)
-        return (z1 - z2)[(n-1):-1]/n
+        return (z1 - z2)[(self.window-1):-1]/self.window
 
 class TrendTransformer(BaseEstimator, TransformerMixin):
 
