@@ -69,7 +69,7 @@ class IntegratedTransformer(BaseEstimator, TransformerMixin):
         Xt2 = self.ar2.transform(X)
         return Xt1 - Xt2
 
-class MovingAverageTransformer(BaseEstimator, TransformerMixin):
+class RollingMeanTransformer(BaseEstimator, TransformerMixin):
     def __init__(self, window=5):
         super().__init__()
         self.window = window

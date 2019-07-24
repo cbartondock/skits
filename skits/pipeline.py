@@ -228,11 +228,11 @@ class ForecasterPipeline(_BasePipeline):
                 prediction[:, [idx]] = self.inverse_transform(prediction[:, [idx]])
         return prediction[start_idx:].squeeze()
 
-    def forecast(self, X, start_idx, end_idx=None, trans_window=None):
+    def forecast(self, X, start_idx, forecast_window=None, trans_window=None):
         """
         Run out of sample predictions. That is, predict on X up until start_idx,
         use the predictions to concatenate data onto X, and continue predicting
-        for the full length of X (or end_idx if specified).
+        for the full length of X (or forecast_window if specified).
 
         Parameters
         ----------
@@ -258,9 +258,10 @@ class ForecasterPipeline(_BasePipeline):
         if trans_window is not None:
             assert start_idx > trans_window, (
                 'start_idx must be > than trans_window')
-        if end_idx is not None:
-            assert end_idx > start_idx, (
-                    'end_idx must be > than start_idx')
+        if forecast_window is not None:
+            assert forecast_window > 0, (
+                    'forecast_window must be a positive')
+            end_idx = start_idx + forecast_window
         else:
             end_idx=X.shape[0]
         # Run the prediction up until the starting index.
@@ -278,9 +279,9 @@ class ForecasterPipeline(_BasePipeline):
         for idx in range(start_idx, end_idx):
 
             # Predict the next point
-            offset = trans_window or np.inf
+            start = 0 if trans_window==None else idx - trans_window
             next_point = expand_dim_if_needed(
-                self.predict(X_total[max(0,idx - offset):idx], to_scale=True,
+                self.predict(X_total[start:idx], to_scale=True,
                              refit=False)
             )[-1, 0]
 
