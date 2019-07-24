@@ -111,7 +111,7 @@ class LogTransformer(BaseEstimator, TransformerMixin):
             try:
                 Xt = np.log(1+X)
             except FloatingPointError:
-                raise ValueError('X cannot have negative or zero values')
+                raise ValueError('X cannot have negative values')
         return Xt
 
     def inverse_transform(self, X):
