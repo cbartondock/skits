@@ -5,6 +5,7 @@ from skits.feature_extraction import (AutoregressiveTransformer,
                                       SeasonalTransformer,
                                       IntegratedTransformer,
                                       TrendTransformer,
+                                      RollingMeanTransformer,
                                       FourierTransformer)
 
 
