@@ -61,7 +61,14 @@ class TestRollingMeanTransformer:
         X = np.arange(1,6, dtype=np.float64)[:, np.newaxis]
         rm = RollingMeanTransformer(window=2)
         X_trans = rm.fit_transform(X)
-        expected = np.array([[[1.5],[2.5],[3.5],[4.5],[5.0]]])
+        expected = np.array([[np.nan],[np.nan],[1.5],[2.5],[3.5]])
+        assert np.allclose(X_trans, expected, equal_nan=True)
+
+    def test_rollingmean_transform_2(self):
+        X = np.arange(1,6, dtype=np.float64)[:, np.newaxis]
+        rm = RollingMeanTransformer(window=3)
+        X_trans = rm.fit_transform(X)
+        expected = np.array([[np.nan],[np.nan],[np.nan],[2],[3]])
         assert np.allclose(X_trans, expected, equal_nan=True)
 
 class TestSeasonalTransfomer:

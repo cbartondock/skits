@@ -80,7 +80,8 @@ class RollingMeanTransformer(BaseEstimator, TransformerMixin):
     def transform(self, X, y=None):
         z2 = np.cumsum(np.pad(X, ((self.window,0),(0,0)), 'constant', constant_values=0), axis=0)
         z1 = np.cumsum(np.pad(X, ((0,self.window),(0,0)), 'constant', constant_values=X[-1]), axis=0)
-        return (z1 - z2)[(self.window-1):-1]/self.window
+        zc = (z1 - z2)[(self.window-1):-1]/self.window
+        return np.vstack((np.repeat(np.nan,self.window).reshape(-1,1), zc[0:len(X)-self.window]))
 
 class TrendTransformer(BaseEstimator, TransformerMixin):
 

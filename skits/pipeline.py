@@ -241,6 +241,9 @@ class ForecasterPipeline(_BasePipeline):
             of the pipeline.
         start_idx : int
             Index of X on which to start forecasting.
+        forecast_window : int (optional)
+            Number of steps to forecast into the future (defaults to forecast
+            the remainder of X, but can be longer or shorter).
         trans_window : int (optional)
             Number of previous values of X necessary for transforming X into
             features. Set this to speed up forecasting such that you do not have
